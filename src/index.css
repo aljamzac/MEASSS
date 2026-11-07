@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@media print {
+  /* Single @page rule: real margins on every page. */
+  @page {
+    size: A4 portrait;
+    margin: 1cm 1.5cm;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide EVERYTHING in <body> except the print portal (the app, Vite overlays,
+     modals, etc.). Nothing invisible can push the report onto page 2. */
+  body > *:not(#print-root) {
+    display: none !important;
+  }
+
+  #print-root {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    break-before: avoid !important;
+    page-break-before: avoid !important;
+  }
+
+  #print-root > :first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead { display: table-header-group; } /* repeat column headers on the next page */
+  tr    { break-inside: avoid; }         /* never split a row */
+}
+
+
+/* ───────────────────────── Login page background animation ───────────────────────── */
+
+/* Blurred banner slowly zooms and drifts */
+@keyframes login-bg-drift {
+  0%, 100% { transform: scale(1.15) translate3d(0, 0, 0); }
+  50%      { transform: scale(1.25) translate3d(-2%, -1.5%, 0); }
+}
+
+/* Linear gradient slides across the screen */
+@keyframes login-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* Light blobs float around */
+@keyframes login-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(60px, 40px, 0); }
+}
+
+.login-bg-drift   { animation: login-bg-drift 22s ease-in-out infinite; will-change: transform; }
+.login-gradient   { animation: login-gradient 16s ease-in-out infinite; }
+.login-float      { animation: login-float 12s ease-in-out infinite; }
+.login-float-slow { animation: login-float 19s ease-in-out infinite reverse; }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .login-bg-drift, .login-gradient, .login-float, .login-float-slow { animation: none; }
+}
